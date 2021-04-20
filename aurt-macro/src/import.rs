@@ -21,9 +21,10 @@ pub fn process_plain_fn_signature(
     for fn_arg in args {
         if let FnArg::Typed(pat) = fn_arg.clone() {
             if match_basic_args_type(*pat.ty.clone()) {
+                println!("aaaaa: {:?}", fn_arg);
                 result.push(fn_arg);
             } else if match_bytes_args_type(*pat.ty) {
-
+                result.push(fn_arg);
             }
         }
     }
