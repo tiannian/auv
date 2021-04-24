@@ -1,7 +1,17 @@
-#[aurt_macro::import]
-fn test_import_plain(a: u8) -> u8;
+#![feature(trace_macros)]
 
-// #[aurt_macro::import]
-// async fn test_import_async() -> u8;
+use aurt_macro::cimport;
+
+trace_macros!(true);
+extern "C" {
+    #[cimport]
+    fn test(a: u8, b: &[u8]) -> usize;
+}
+trace_macros!(false);
 
 fn main() {}
+
+// #[aurt::]
+// pub fn test() -> Vec<u8> {}
+
+
