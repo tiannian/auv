@@ -1,13 +1,9 @@
-#![feature(trace_macros)]
+use aurt_macro::import;
 
-use aurt_macro::cimport;
-
-trace_macros!(true);
 extern "C" {
-    #[cimport]
+    #[import]
     fn test(a: u8, b: &[u8]) -> usize;
 }
-trace_macros!(false);
 
 fn main() {}
 
