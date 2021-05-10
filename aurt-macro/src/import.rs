@@ -1,13 +1,15 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{punctuated::Punctuated, FnArg, Token, Type, parse_quote, Pat};
+use syn::{punctuated::Punctuated, FnArg, Token, Type, parse_quote, Pat, ReturnType};
 
 pub fn match_basic_args_type(t: Type) -> bool {
+    // is pointer or is function.
     let pointer = match t {
         Type::Ptr(_) => true,
         Type::BareFn(_) => true,
         _ => false
     };
+    // is base type
     let basic_type = t == parse_quote!(u8) ||
         t == parse_quote!(u16) ||
         t == parse_quote!(u32) ||
@@ -37,15 +39,17 @@ pub fn match_bytes_args_type(t: Type) -> bool {
         is_array
 }
 
-pub fn process_plain_fn_signature(
+pub fn process_plain_fn_input(
     args: &Punctuated<FnArg, Token![,]>,
 ) -> Punctuated<FnArg, Token![,]> {
     let mut result = Punctuated::new();
     for fn_arg in args {
         if let FnArg::Typed(pat) = fn_arg.clone() {
             if match_basic_args_type(*pat.ty.clone()) {
+                // if argument is basic type, keep.
                 result.push(fn_arg.clone());
             } else if match_bytes_args_type(*pat.ty.clone()) {
+                // if argument is bytes, convert to ptr and len.
                 if let Pat::Ident(p) = *pat.pat {
                     let name_ident = p.ident;
                     let name_ptr_ident = quote::format_ident!("{}_ptr", name_ident);
@@ -68,7 +72,16 @@ pub fn import(input: TokenStream) -> TokenStream {
         && sig.abi.is_none()
     {
         // plain fn
-        sig.inputs = process_plain_fn_signature(&sig.inputs);
+        // process fn input
+        sig.inputs = process_plain_fn_input(&sig.inputs);
+        // process fn output
+        let output_vaild = match &sig.output {
+            ReturnType::Default => true,
+            ReturnType::Type(_, t) => match_basic_args_type(*(t.clone())),
+        };
+        if !output_vaild {
+            panic!("unsupport! Return type must be empty or basic type");
+        }
     } else {
         panic!("unsupport!");
     }
