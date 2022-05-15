@@ -1,6 +1,8 @@
 [workspace]
 members = [
     "auv-chip-hal",
+    "auv-rt",
+    "auv-sync",
 
     # platform/esp8266
     "platform/esp8266/auv-chip-hal",
