@@ -1,4 +1,10 @@
 [workspace]
 members = [
-    "auv-chip-hal"
+    "auv-chip-hal",
+
+    # platform/esp8266
+    "platform/esp8266/auv-chip-hal",
+
+    # platform/esp32
+    "platform/esp32/auv-chip-hal",
 ]
