@@ -11,4 +11,3 @@ define_word!(u16);
 define_word!(u32);
 define_word!(u64);
 define_word!(u128);
-

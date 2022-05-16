@@ -1,8 +1,9 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
-    }
-}
+#![no_std]
+
+#![feature(waker_getters)]
+
+mod waker;
+pub use waker::*;
+
+mod task;
+pub use task::*;

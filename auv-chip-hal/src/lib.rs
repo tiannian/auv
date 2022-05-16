@@ -5,4 +5,3 @@ pub use rng::*;
 
 mod word;
 pub use word::*;
-
