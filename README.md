@@ -4,7 +4,7 @@ Auv is async micro(μ) runtime for all platform.
 
 ## Support platfrom
 
-- University computing
+- Wasm runtime
 - Browser
 - Embedded system
 
